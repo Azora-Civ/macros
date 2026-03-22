@@ -1,4 +1,4 @@
-const debug = true;
+const debug = false;
 
 const File = Java.type("java.io.File");
 const Files = Java.type("java.nio.file.Files");
@@ -9,6 +9,14 @@ const ZipInputStream = Java.type("java.util.zip.ZipInputStream");
 const BufferedInputStream = Java.type("java.io.BufferedInputStream");
 const BufferedOutputStream = Java.type("java.io.BufferedOutputStream");
 const FileOutputStream = Java.type("java.io.FileOutputStream");
+
+function deleteDir(file) {
+    if (file.isDirectory()) {
+        const files = file.listFiles()
+        if (files) for (let f of files) deleteDir(f)
+    }
+    file.delete()
+}
 
 function get_path() {
     if (debug) return "."
@@ -21,7 +29,7 @@ function get_path() {
 }
 
 function load(loc) {
-    return require(get_path() + File.seperator + loc)
+    return require(get_path() + File.separator + loc)
 }
 
 function readFileIfExists(path) {
@@ -113,4 +121,4 @@ function reload_from_source() {
 }
 
 reload_from_source()
-load("main")
+load("main.js")
