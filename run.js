@@ -1,4 +1,9 @@
-const debug = false;
+user = {
+    debug: true,
+    chat_prefix: "/g bozos",
+    discord_handle: "<@450908675457024001>",
+    log_level: 0
+}
 
 const File = Java.type("java.io.File");
 const Files = Java.type("java.nio.file.Files");
@@ -19,7 +24,7 @@ function deleteDir(file) {
 }
 
 function get_path() {
-    if (debug) return "."
+    if (user.debug) return "."
 
     return Paths.get("").toAbsolutePath()
         .resolve("config")
@@ -42,7 +47,7 @@ function readFileIfExists(path) {
 }
 
 function reload_from_source() {
-    if (debug) return;
+    if (user.debug) return;
 
     const api = `https://api.github.com/repos/Azora-Civ/macros/releases/latest`
     const connection = new URL(api).openConnection()
