@@ -19,5 +19,11 @@ module.exports = function () {
         pos.z === Math.floor(z)
     )
 
+    if (match) {
+        match.run()
+    } else {
+        bot.logger.info("Couldn't find a farm at this position.")
+    }
+
     match?.run()
 }

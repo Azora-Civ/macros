@@ -1,7 +1,6 @@
 const { Event } = require("./lib/util")
 bot_state = {
     on_repeat: new Event(),
-    user,
     PLAYER: Player.getPlayer(),
     INVENTORY: Player.openInventory()
 }
@@ -35,7 +34,7 @@ function finish() {
 module.exports = {
     start, finish,
 
-    toggle_paused(new_value = !(GlobalVars.getBoolean("bot_is_paused") ?? false)) {
+    toggle_pause(new_value = !(GlobalVars.getBoolean("bot_is_paused") ?? false)) {
         GlobalVars.putBoolean("bot_is_paused", new_value)
     },
 

@@ -9,8 +9,8 @@ function is_already_running() {
 }
 
 if (is_already_running()) {
-    bot.toggle_paused()
+    bot.toggle_pause()
 } else {
-    bot.toggle_paused(false)
+    bot.toggle_pause(false)
     require("./farms/map.js")()
 }
