@@ -24,6 +24,4 @@ module.exports = function () {
     } else {
         bot.logger.info("Couldn't find a farm at this position.")
     }
-
-    match?.run()
 }

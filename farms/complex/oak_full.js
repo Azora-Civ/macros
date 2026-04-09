@@ -1,9 +1,8 @@
-bot = require("../../bot.js")
 module.exports = function () {
     let row_elements = 13
     let col_elements = 21
     let offset = 5
-    let layers = 7
+    let layers = 8
 
     let drops = [bot.item.of("oak_log"), bot.item.of("apple")]
 
