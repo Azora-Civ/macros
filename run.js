@@ -1,4 +1,4 @@
-debug = true;
+debug = false;
 emergency_chat = "/g bozos <@450908675457024001>"
 
 const File = Java.type("java.io.File");
