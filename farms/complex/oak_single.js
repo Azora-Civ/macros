@@ -1,4 +1,3 @@
-bot = require("../../bot.js")
 module.exports = function () {
     let row_elements = 13
     let col_elements = 21

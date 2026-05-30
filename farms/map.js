@@ -1,14 +1,16 @@
 const farms = [
     { pos: PositionCommon.createPos(9557, 73, 2152),  run: require("./complex/oak_full.js")   },
-    { pos: PositionCommon.createPos(9557, 98, 2152),  run: require("./complex/oak_single.js") },
-    { pos: PositionCommon.createPos(9557, 107, 2152), run: require("./complex/oak_single.js") },
-    { pos: PositionCommon.createPos(9557, 116, 2152), run: require("./complex/oak_single.js") },
-    { pos: PositionCommon.createPos(9557, 125, 2152), run: require("./complex/oak_single.js") },
-    { pos: PositionCommon.createPos(9557, 134, 2152), run: require("./complex/oak_single.js") },
-    { pos: PositionCommon.createPos(9557, 143, 2152), run: require("./complex/oak_single.js") },
-    { pos: PositionCommon.createPos(9557, 152, 2152), run: require("./complex/oak_single.js") },
-    { pos: PositionCommon.createPos(9557, 161, 2152), run: require("./complex/oak_single.js") },
+    { pos: PositionCommon.createPos(9551, 82, 2092),  run: require("./complex/melon_full.js") }
 ]
+
+for (let i = 0; i <9; i++) {
+    func = require("./complex/oak_single.js")
+    farms.push({ pos: PositionCommon.createPos(9557, 98+(i*9), 2152),  run: func })
+}
+for (let i = 0; i <13; i++) {
+    func = require("./complex/melon_single.js")
+    farms.push({ pos: PositionCommon.createPos(9551, 88+(i*3), 2092),  run: func })
+}
 
 module.exports = function () {
     const { x, y, z } = Player.getPlayer().getPos()
