@@ -12,5 +12,5 @@ if (is_already_running()) {
     bot.toggle_pause()
 } else {
     bot.toggle_pause(false)
-    require("./farms/map.js")()
+    require("./map.js")()
 }

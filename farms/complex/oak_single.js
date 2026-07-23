@@ -6,12 +6,13 @@ module.exports = function () {
 
     bot.start()
     bot.progress.init(row_elements * col_elements)
+    let ctb = bot.commands.ctb(false)
 
-    do_tree = dir => bot.action.complex.do_tree(dir, offset, {
+    let do_tree = dir => bot.action.complex.do_tree(dir, offset, {
         do_grow: false,
         grow_time: 0,
         do_mine: true,
-        mine_time: 1650,
+        mine_time: 1700,
         do_plant: true,
         increment_progress: true
     })
@@ -34,5 +35,7 @@ module.exports = function () {
     bot.action.move_mine(bot.dir.SOUTH, offset * (col_elements-1), true, 0)
     bot.action.move_mine(bot.dir.WEST, offset * row_elements, true, 0)
 
+    bot.commands.ctb(ctb)
+    bot.progress.finish()
     bot.finish()
 }

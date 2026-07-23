@@ -15,6 +15,7 @@ const { logger } = require("./lib/logging")
 const { control } = require("./lib/control")
 const { action } = require("./lib/action")
 const { progress } = require("./lib/progress")
+const { commands } = require("./lib/command")
 
 let farm_depth = 0
 
@@ -47,5 +48,6 @@ module.exports = {
     control,
     logger,
     action,
-    progress
+    progress,
+    commands
 }
