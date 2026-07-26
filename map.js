@@ -13,6 +13,9 @@ for (let i = 0; i <13; i++) {
     func = require("./farms/complex/melon_single.js")
     farms.push({ pos: PositionCommon.createPos(9551, 88+(i*3), 2092), run: func })
 }
+func = require("./farms/azuna/oak.js")
+farms.push({ pos: PositionCommon.createPos(-579, 3, -25737), run: func, args: { mine_time: 2000 } })
+farms.push({ pos: PositionCommon.createPos(-579, 10, -25737), run: func, args: { mine_time: 2000 } })
 
 module.exports = function () {
     const { x, y, z } = Player.getPlayer().getPos()
@@ -32,7 +35,11 @@ module.exports = function () {
         Chat.say(`/g Azora started farming: ${match.name}`)
     }
 
-    match.run()
+    if (match.args) {
+        match.run(match.args)
+    } else {
+        match.run()
+    }
 
     if (match.name) {
         Chat.say(`/g Azora finished farming: ${match.name}`)
