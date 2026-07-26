@@ -27,7 +27,6 @@ function start() {
 function finish() {
     farm_depth--;
     if (farm_depth === 0) {
-        logger.alert("Finished farming!");
         Chat.say("/logout");
     }
 }
