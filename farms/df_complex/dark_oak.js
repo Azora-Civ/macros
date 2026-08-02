@@ -1,4 +1,4 @@
-﻿const bot = require("../bot");
+﻿const bot = require("../../bot");
 module.exports = function () {
     let offset = 8
     let rows = 6
