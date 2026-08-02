@@ -3,6 +3,7 @@ const farms = [
     { pos: PositionCommon.createPos(9551, 82, 2092),  run: require("./farms/complex/melon_full.js") },
     { pos: PositionCommon.createPos(8966, 103, 1408), run: require("./farms/df_complex/dark_oak.js"), name: "Dark Oak L1" },
     //{ pos: PositionCommon.createPos(9427, 115, 1736),  run: require("./membership_check.js") },
+    { pos: PositionCommon.createPos(9426, 115, 1735),  run: require("./farms/bleeze_wait.js") },
 ]
 
 for (let i = 0; i <9; i++) {
