@@ -4,9 +4,7 @@ module.exports = function () {
     let offset = 5
     let drops = [bot.item.of("oak_log"), bot.item.of("apple")]
 
-    bot.start()
-    bot.progress.init(row_elements * col_elements)
-    let ctb = bot.commands.ctb(false)
+    bot.start(row_elements * col_elements, false)
 
     let do_tree = dir => bot.action.complex.do_tree(dir, offset, {
         do_grow: false,
@@ -35,7 +33,5 @@ module.exports = function () {
     bot.action.move_mine(bot.dir.SOUTH, offset * (col_elements-1), true, 0)
     bot.action.move_mine(bot.dir.WEST, offset * row_elements, true, 0)
 
-    bot.commands.ctb(ctb)
-    bot.progress.finish()
     bot.finish()
 }

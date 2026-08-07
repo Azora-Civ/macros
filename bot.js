@@ -17,16 +17,26 @@ const { action } = require("./lib/action")
 const { progress } = require("./lib/progress")
 const { commands } = require("./lib/command")
 
-let farm_depth = 0
+const stack = []
+function start(n = null, ctb = false) {
+    const state = {
+        n, ctb
+    }
+    stack.push(state)
 
-function start() {
-    farm_depth++;
-    if (farm_depth === 1) logger.info("Started farming!");
+    if (n) bot.progress.init(n)
+    if (ctb !== null) state.old_ctb = bot.commands.ctb(ctb)
+
+    if (stack.length === 1) logger.info("Started farming!");
 }
 
 function finish() {
-    farm_depth--;
-    if (farm_depth === 0) {
+    const state = stack.pop()
+
+    if (state.n) bot.progress.finish()
+    if (state.old_ctb) bot.commands.ctb(state.old_ctb)
+
+    if (stack.length === 0) {
         Chat.say("/logout");
     }
 }

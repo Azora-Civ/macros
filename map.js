@@ -1,40 +1,45 @@
-const farms = [
-    { pos: PositionCommon.createPos(9557, 73, 2152),  run: require("./farms/complex/oak_full.js")   },
-    { pos: PositionCommon.createPos(9551, 82, 2092),  run: require("./farms/complex/melon_full.js") },
-    { pos: PositionCommon.createPos(8966, 103, 1408), run: require("./farms/df_complex/dark_oak.js"), name: "Dark Oak L1" },
-    //{ pos: PositionCommon.createPos(9427, 115, 1736),  run: require("./membership_check.js") },
-    { pos: PositionCommon.createPos(9426, 115, 1735),  run: require("./farms/bleeze_wait.js") },
-]
+const farms = new Map()
+const vec3 = bot.math.vec
 
-for (let i = 0; i <9; i++) {
-    func = require("./farms/complex/oak_single.js")
-    farms.push({ pos: PositionCommon.createPos(9557, 98+(i*9), 2152), run: func, name: "Badlands Oak L" + (i+1) })
+function pos_key(pos) { return `${pos.x},${pos.y},${pos.z}`; }
+function Farm(pos, run, name=null, args=null) { return { pos, run, name, args }; }
+function add_farm(farm) { farms.set(pos_key(farm.pos), farm); }
+
+function add_farms(n, offset, farm, full_pos=null) {
+    if (full_pos)
+        add_farm(Farm(full_pos, require("./farms/elevator_stacked.js")))
+
+    for (let i = 0; i < n; i++) {
+        const clone = { ...farm }
+        clone.pos = clone.pos.add(vec3(0, offset*i, 0))
+        clone.name += ` L${i+1}`
+        add_farm(clone)
+    }
 }
-for (let i = 0; i <13; i++) {
-    func = require("./farms/complex/melon_single.js")
-    farms.push({ pos: PositionCommon.createPos(9551, 88+(i*3), 2092), run: func })
-}
-for (let i = 0; i < 5; i++) {
-    func = require("./farms/azuna/oak.js")
-    farms.push({ pos: PositionCommon.createPos(-579, 3 + (i*7), -25737), run: func, args: { mine_time: 2000 } })
-}
-for (let i = 0; i < 5; i++) {
-    func = require("./farms/df_complex/jungle.js")
-    farms.push({ pos: PositionCommon.createPos(8964, 103+(8*i), 1406), run: func })
-}
+
+// ===== Badlands Complex =====
+add_farms(9, 9, Farm(vec3(9557, 98, 2152), require("./farms/complex/oak.js"), "Badlands Oak"), vec3(9557, 73, 2152))
+add_farms(13, 3, Farm(vec3(9551, 88, 2092), require("./farms/complex/melon.js")))
+
+// ===== Dark Forest Complex =====
+add_farms(3, 8, Farm(vec3(8964, 103, 1406), require("./farms/df_complex/jungle.js"), "DF Jungle"), vec3(8964, 20, 1406))
+add_farms(1, 11, Farm(vec3(8966, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"))
+
+// ===== Azuna =====
+add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
+
+// ===== Loose stuff =====
+add_farm(Farm(vec3(9426, 115, 1735), require("./farms/bleeze_wait.js")))
 
 
 module.exports = function () {
-    const { x, y, z } = Player.getPlayer().getPos()
+    const player_pos = bot.math.floor(Player.getPlayer().getPos())
+    const key = pos_key(player_pos)
 
-    let match = farms.find(({ pos }) =>
-        pos.x === Math.floor(x) &&
-        pos.y === Math.floor(y) &&
-        pos.z === Math.floor(z)
-    )
+    let match = farms.get(key)
 
     if (!match && debug) {
-        match = {run: require("./debug.js")}
+        match = {run: require("./utils/debug.js")}
     }
 
     if (!match) {

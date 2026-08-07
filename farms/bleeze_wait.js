@@ -14,7 +14,7 @@ module.exports = function () {
     bot_state.on_repeat.set("bleeze", null)
 
 
-    Chat.log(`§6⚠ Bleeze detected!`);
+    Chat.log(`§6⚠⚠⚠ Bleeze detected! ⚠⚠⚠`);
     for (let i = 0; i < 8; i++) {
         Client.waitTick(4)
         World.playSound("minecraft:block.note_block.chime", 1, .05);
