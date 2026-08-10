@@ -5,6 +5,10 @@ const HOLD_TIME_MILLIS = 1000
 function is_already_running() {
     const current = context.getCtx().getFile().toString()
 
+    Chat.log(JsMacros.getOpenContexts()
+        .filter(ctx => ctx.getFile().toString() === current && !ctx.isContextClosed())
+        .length > 1)
+
     return JsMacros.getOpenContexts()
         .filter(ctx => ctx.getFile().toString() === current && !ctx.isContextClosed())
         .length > 1

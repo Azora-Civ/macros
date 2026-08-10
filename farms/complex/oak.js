@@ -2,7 +2,7 @@ module.exports = function () {
     let row_elements = 13
     let col_elements = 21
     let offset = 5
-    let drops = [bot.item.of("oak_log"), bot.item.of("apple")]
+    let drops = [bot.item.of("oak_log"), bot.item.of("apple"), bot.item.of("oak_leaves"), bot.item.of("stick")]
 
     bot.start(row_elements * col_elements, false)
 

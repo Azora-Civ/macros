@@ -1,5 +1,5 @@
-debug = false;
-emergency_chat = "/g bozos <@450908675457024001>"
+debug = true;
+emergency_chat = "/g bozos <@450908675457024001>" // Where the bot should send messages in case of emergency. Make it ping you by adding <@your_discord_id>
 
 const File = Java.type("java.io.File");
 const Files = Java.type("java.nio.file.Files");

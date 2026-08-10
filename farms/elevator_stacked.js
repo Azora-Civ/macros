@@ -1,5 +1,4 @@
-﻿module.exports = function () {
-    let layers = 3
+﻿module.exports = function (layers) {
     let do_layer = require("../../map.js")
 
     bot.start(layers)
@@ -9,6 +8,7 @@
         do_layer()
         bot.progress.increment()
     }
+
     bot.action.elevator(-layers)
 
     bot.finish()

@@ -1,21 +1,58 @@
 const { Event } = require("./lib/util")
-bot_state = {
+
+/**
+ * @typedef {Object} Bot
+ * @property {typeof import("./lib/look")} look
+ * @property {typeof import("./lib/move")} move
+ * @property {typeof import("./lib/input")} input
+ * @property {typeof import("./lib/item")} item
+ * @property {typeof import("./lib/dir")} dir
+ * @property {typeof import("./lib/math")} math
+ * @property {typeof import("./lib/logger")} logger
+ * @property {typeof import("./lib/control")} control
+ * @property {typeof import("./lib/action")} action
+ * @property {typeof import("./lib/progress")} progress
+ * @property {typeof import("./lib/commands")} commands
+ * @property {typeof import("./lib/check")} check
+ * @property {typeof import("./lib/world")} world
+ * @property {typeof import("./lib/ui")} ui
+ */
+
+const base = {
+    start, finish,
+
+    toggle_pause(new_value = !(GlobalVars.getBoolean("bot_is_paused") ?? false)) {
+        GlobalVars.putBoolean("bot_is_paused", new_value)
+    },
+
     on_repeat: new Event(),
     PLAYER: Player.getPlayer(),
     INVENTORY: Player.openInventory()
 }
 
-const { look } = require("./lib/look")
-const { move } = require("./lib/move")
-const { input } = require("./lib/input")
-const { item } = require("./lib/item")
-const { dir } = require("./lib/directions")
-const { math } = require("./lib/math")
-const { logger } = require("./lib/logging")
-const { control } = require("./lib/control")
-const { action } = require("./lib/action")
-const { progress } = require("./lib/progress")
-const { commands } = require("./lib/command")
+/** @type {Bot & typeof base} */
+bot = base
+
+const libs = [
+    "dir",
+    "math",
+    "look",
+    "move",
+    "input",
+    "item",
+    "logger",
+    "control",
+    "action",
+    "progress",
+    "commands",
+    "check",
+    "world",
+    "ui"
+]
+
+for (const lib of libs) {
+    bot[lib] = require(`./lib/${lib}.js`)
+}
 
 const stack = []
 function start(n = null, ctb = false) {
@@ -27,7 +64,7 @@ function start(n = null, ctb = false) {
     if (n) bot.progress.init(n)
     if (ctb !== null) state.old_ctb = bot.commands.ctb(ctb)
 
-    if (stack.length === 1) logger.info("Started farming!");
+    if (stack.length === 1) bot.logger.info("Started farming!");
 }
 
 function finish() {
@@ -37,26 +74,8 @@ function finish() {
     if (state.old_ctb) bot.commands.ctb(state.old_ctb)
 
     if (stack.length === 0) {
-        Chat.say("/logout");
+        bot.world.leave()
     }
 }
 
-module.exports = {
-    start, finish,
-
-    toggle_pause(new_value = !(GlobalVars.getBoolean("bot_is_paused") ?? false)) {
-        GlobalVars.putBoolean("bot_is_paused", new_value)
-    },
-
-    look,
-    move,
-    input,
-    item,
-    dir,
-    math,
-    control,
-    logger,
-    action,
-    progress,
-    commands
-}
+module.exports = bot

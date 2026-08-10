@@ -7,12 +7,12 @@ function add_farm(farm) { farms.set(pos_key(farm.pos), farm); }
 
 function add_farms(n, offset, farm, full_pos=null) {
     if (full_pos)
-        add_farm(Farm(full_pos, require("./farms/elevator_stacked.js")))
+        add_farm(Farm(full_pos, require("./farms/elevator_stacked.js"), null, n))
 
     for (let i = 0; i < n; i++) {
         const clone = { ...farm }
         clone.pos = clone.pos.add(vec3(0, offset*i, 0))
-        clone.name += ` L${i+1}`
+        if (clone.name) clone.name += ` L${i+1}`
         add_farm(clone)
     }
 }
@@ -30,7 +30,7 @@ add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), nul
 
 // ===== Loose stuff =====
 add_farm(Farm(vec3(9426, 115, 1735), require("./farms/bleeze_wait.js")))
-
+add_farms(4, 10, Farm(vec3(8964, 113, 1401), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 13, row_dir: bot.dir.NORTH, col_dir: bot.dir.EAST, offset: 5, is_big: false}))
 
 module.exports = function () {
     const player_pos = bot.math.floor(Player.getPlayer().getPos())
