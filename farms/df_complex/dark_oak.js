@@ -1,6 +1,6 @@
 ﻿let offset = 8
-let rows = 6
-let cols = 6
+let rows = 10
+let cols = 9
 
 let wood = bot.item.of("dark_oak_log")
 let sapling = bot.item.of("dark_oak_sapling")
