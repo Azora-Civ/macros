@@ -22,15 +22,17 @@ add_farms(9, 9, Farm(vec3(9557, 98, 2152), require("./farms/complex/oak.js"), "B
 add_farms(13, 3, Farm(vec3(9551, 88, 2092), require("./farms/complex/melon.js")))
 
 // ===== Dark Forest Complex =====
-add_farms(3, 8, Farm(vec3(8964, 103, 1406), require("./farms/df_complex/jungle.js"), "DF Jungle"), vec3(8964, 20, 1406))
-add_farms(1, 11, Farm(vec3(8966, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"))
+add_farms(4, 10, Farm(vec3(8964, 103, 1406), require("./farms/df_complex/jungle.js"), "DF Jungle"), vec3(8964, 20, 1406))
+add_farms(3, 11, Farm(vec3(8966, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"))
 
 // ===== Azuna =====
 add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
 
 // ===== Loose stuff =====
 add_farm(Farm(vec3(9426, 115, 1735), require("./farms/bleeze_wait.js")))
-add_farms(4, 10, Farm(vec3(8964, 113, 1401), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 13, row_dir: bot.dir.NORTH, col_dir: bot.dir.EAST, offset: 5, is_big: false}))
+// jungle
+add_farms(8, 10, Farm(vec3(8964, 143, 1401), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 13, row_dir: bot.dir.NORTH, col_dir: bot.dir.WEST, offset: 5, is_big: false}))
+add_farms(4, 11, Farm(vec3(8934, 103, 1416), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 9, row_dir: bot.dir.SOUTH, col_dir: bot.dir.EAST, offset: 8, is_big: true}))
 
 module.exports = function () {
     const player_pos = bot.math.floor(Player.getPlayer().getPos())
@@ -48,7 +50,7 @@ module.exports = function () {
     }
 
     if (match.name) {
-        Chat.say(`/g Azora started farming: ${match.name}`)
+        Chat.say(`/g AzoraFarms started farming: ${match.name}`)
     }
 
     if (match.args) {
@@ -58,6 +60,6 @@ module.exports = function () {
     }
 
     if (match.name) {
-        Chat.say(`/g Azora finished farming: ${match.name}`)
+        Chat.say(`/g AzoraFarms finished farming: ${match.name}`)
     }
 }

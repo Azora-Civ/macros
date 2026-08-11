@@ -25,6 +25,10 @@ const base = {
         GlobalVars.putBoolean("bot_is_paused", new_value)
     },
 
+    is_paused() {
+        return GlobalVars.getBoolean("bot_is_paused") ?? false
+    },
+
     on_repeat: new Event(),
     PLAYER: Player.getPlayer(),
     INVENTORY: Player.openInventory()
@@ -63,6 +67,7 @@ function start(n = null, ctb = false) {
 
     if (n) bot.progress.init(n)
     if (ctb !== null) state.old_ctb = bot.commands.ctb(ctb)
+    bot.check.healthy()
 
     if (stack.length === 1) bot.logger.info("Started farming!");
 }

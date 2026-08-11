@@ -10,7 +10,7 @@
         do_grow: false,
         grow_time: 1000,
         do_mine: true,
-        mine_time: 1700,
+        mine_time: 2400,
         do_plant: true,
         increment_progress: true,
         sapling: bot.item.of("jungle_sapling")

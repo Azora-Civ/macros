@@ -1,5 +1,7 @@
 ﻿const dirt = bot.item.of("dirt")
 const glass_pane = bot.item.of("glass_pane")
+const stone = bot.item.of("stone")
+
 let options = {
     offset: 5,
     rows: 5,
@@ -17,7 +19,9 @@ const EAST = bot.dir.EAST
 module.exports = function (args) {
    options = args
 
-    bot.start(options.rows * options.cols)
+    bot.start(options.rows * options.cols, true)
+    bot.check.has_stone(true)
+    bot.check.hold_min_height(true)
 
     for (let i = 0; i < options.rows; i++) {
         let is_first = i===0
@@ -46,60 +50,45 @@ function do_row(row_dir, col_dir, is_first) {
 }
 
 function place_tree_base(direction, offset, skip_dirt) {
-    let last_block = dirt
+    bot.input.toggle_sneak(true)
+    bot.move.set_eps(.06)
 
     if (options.is_big) {
         offset--
-        if ([bot.dir.SOUTH, bot.dir.EAST].includes(direction)) bot.action.move(direction, 1)
+        if ([SOUTH, EAST].includes(direction)) bot.action.move(direction, 1)
     }
 
-    for (let i = 0; i < offset-1; i++) {
-        shift_place_block(direction, glass_pane, last_block)
-        last_block = glass_pane
-    }
+    bot.action.center()
+    bot.action.bridge(direction, offset-1, glass_pane, 1)
 
     if (skip_dirt) {
         bot.action.move(direction, 1)
-        if (options.is_big) {
-            if ([NORTH, WEST].includes(direction)) {
-                bot.action.move(direction, 1)
-            }
+        if (options.is_big && [NORTH, WEST].includes(direction)) {
+            bot.action.move(direction, 1)
         }
     } else {
-        shift_place_block(direction, dirt, last_block)
+        bot.action.bridge(direction, 1, dirt, 0)
 
         if (options.is_big) {
-            const turn = [bot.dir.NORTH, bot.dir.EAST].includes(direction) ? bot.dir.turn_right : bot.dir.turn_left
-            const times = [bot.dir.NORTH, bot.dir.WEST].includes(direction) ? 5 : 4
+            const turn = [NORTH, EAST].includes(direction) ? bot.dir.turn_right : bot.dir.turn_left
+            const times = [NORTH, WEST].includes(direction) ? 5 : 4
 
             for (let i = 0; i < times; i++) {
-                if (i <= 2) shift_place_block(direction, dirt, dirt)
+                if (i < 3) bot.action.bridge(direction, 1, dirt, 0)
                 else bot.move.toDir(direction, 1)
 
                 direction = turn(direction)
             }
 
-            bot.control.loop(bot.move.not_reached_target())
+            bot.control.loop(bot.move.not_reached_target)
+
         }
     }
 
     if (!skip_dirt) {
         bot.progress.increment()
     }
-}
 
-function shift_place_block(direction, item) {
-    bot.input.toggle_sneak(true)
     bot.move.set_eps(.15)
-    const look_direction = bot.dir.turn_back(direction)
-    bot.look.towards(look_direction, 80)
-
-    bot.move.toDir(direction, 1)
-
-    bot.control.loop(bot.move.is_moving())
-
-    bot.item.select(item, item === dirt ? 0 : 1)
-    bot.action.interact(look_direction, 80, 100)
-
-    bot.control.loop(bot.move.not_reached_target)
+    bot.input.toggle_sneak(false)
 }
