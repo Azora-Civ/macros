@@ -23,7 +23,7 @@ add_farms(13, 3, Farm(vec3(9551, 88, 2092), require("./farms/complex/melon.js"))
 
 // ===== Dark Forest Complex =====
 add_farms(4, 10, Farm(vec3(8964, 103, 1406), require("./farms/df_complex/jungle.js"), "DF Jungle"), vec3(8964, 20, 1406))
-add_farms(3, 11, Farm(vec3(8966, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"))
+add_farms(3, 11, Farm(vec3(8934, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"), vec3(8934, 20, 1408))
 
 // ===== Azuna =====
 add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
@@ -32,6 +32,7 @@ add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), nul
 add_farm(Farm(vec3(9426, 115, 1735), require("./farms/bleeze_wait.js")))
 // jungle
 add_farms(8, 10, Farm(vec3(8964, 143, 1401), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 13, row_dir: bot.dir.NORTH, col_dir: bot.dir.WEST, offset: 5, is_big: false}))
+// dark oak
 add_farms(4, 11, Farm(vec3(8934, 103, 1416), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 9, row_dir: bot.dir.SOUTH, col_dir: bot.dir.EAST, offset: 8, is_big: true}))
 
 module.exports = function () {
