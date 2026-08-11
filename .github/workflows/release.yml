@@ -20,6 +20,13 @@ jobs:
         with:
           node-version: 22
 
-      - run: npx --yes semantic-release --branches main --tag-format 'v${version}'
+      - run: >
+          npx --yes semantic-release
+          --branches main
+          --tag-format 'v${version}'
+          --plugins
+          @semantic-release/commit-analyzer
+          @semantic-release/release-notes-generator
+          @semantic-release/github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
