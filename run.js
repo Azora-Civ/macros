@@ -1,5 +1,7 @@
-debug = false;
-emergency_chat = "/g bozos <@450908675457024001>" // Where the bot should send messages in case of emergency. Make it ping you by adding <@your_discord_id>
+// ===== Settings =====
+debug = true;
+do_discord_pings = true; // only for registered Azorans
+// ===== Settings =====
 
 const File = Java.type("java.io.File");
 const Files = Java.type("java.nio.file.Files");

@@ -69,14 +69,14 @@ function start(n = null, ctb = false) {
     if (ctb !== null) state.old_ctb = bot.commands.ctb(ctb)
     bot.check.healthy()
 
-    if (stack.length === 1) bot.logger.info("Started farming!");
+    if (stack.length === 1) bot.logger.info("Script started!");
 }
 
 function finish() {
     const state = stack.pop()
 
     if (state.n) bot.progress.finish()
-    if (state.old_ctb) bot.commands.ctb(state.old_ctb)
+    if (state.old_ctb) bot.commands.ctb(true)
 
     if (stack.length === 0) {
         bot.world.leave()

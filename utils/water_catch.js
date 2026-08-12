@@ -1,10 +1,20 @@
-﻿const default_options = {
+﻿/**
+ * @typedef {Object} Options
+ * @property {number} long_direction
+ * @property {number} short_direction
+ * @property {number} length
+ * @property {string} wood
+ */
+
+/** @type {Options} */
+const default_options = {
     long_direction: bot.dir.NORTH,
     short_direction: bot.dir.WEST,
     length: 3,
     wood: "oak",
 }
 
+/** @type {Options} */
 let options
 
 let plank
@@ -18,25 +28,27 @@ const tool = bot.item.axe()
 let reverse_long_dir
 let reverse_short_dir
 
-
+/**
+ * @param {Partial<Options>} args
+ */
 module.exports = function (args) {
     options = {
         ...default_options,
         ...args,
     }
 
-    bot.start(null, true)
+    bot.start(16, null)
     bot.check.hold_min_height(true)
     bot.check.has_stone(true)
 
     init()
 
-    // build_floor()
-    //
-    // build_wall()
-    // build_water_bed()
-    // build_wall()
-    // build_water_railing()
+    build_floor()
+
+    build_wall()
+    build_water_bed()
+    build_wall()
+    build_water_railing()
 
     place_water()
 
@@ -63,6 +75,8 @@ function build_floor() {
         }
 
         bot.action.bridge(dir, options.length-1, item, slot)
+
+        bot.progress.increment()
     }
 }
 
@@ -71,6 +85,8 @@ function build_wall() {
     bot.action.bridge(reverse_short_dir, 8, plank, 0)
     bot.action.pillar_up(1, plank, 0)
     bot.action.bridge(options.short_direction, 8, plank, 0)
+
+    bot.progress.increment()
 }
 
 function build_water_bed() {
@@ -84,6 +100,7 @@ function build_water_bed() {
     bot.action.move_up(options.long_direction, 0)
 
     bot.action.bridge(reverse_long_dir, options.length-3, trapdoor, 1, 78)
+    bot.progress.increment()
 
     bot.move.toDir(options.short_direction, 1)
     bot.move.toDir(reverse_long_dir, 1)
@@ -104,6 +121,7 @@ function build_water_railing() {
     const length = options.length-2
     const sign = bot.dir.turn_right(reverse_short_dir) === reverse_long_dir ? 1 : -1
 
+    let did_progress = false
     for (let i = 0; i < length; i++) {
         bot.input.toggle_sneak(true)
         bot.action.interact_block(at(sign * .5, .5, 2.05), 100)
@@ -119,6 +137,11 @@ function build_water_railing() {
         bot.action.interact_block(at(sign * .5, .5, -1.05), 100)
         bot.action.wait(100)
 
+        if (!did_progress && i > (length/2)) {
+            bot.progress.increment()
+            did_progress = true
+        }
+
         bot.input.toggle_sneak(true)
         bot.look.towards(reverse_short_dir, 0)
         if (i !== (length-1)) {
@@ -127,12 +150,15 @@ function build_water_railing() {
             bot.action.move_up(options.long_direction, 0)
         }
     }
+
+    bot.progress.increment()
 }
 
 function place_water() {
     bot.check.hold_min_height(false)
     bot.action.move(reverse_short_dir, 1)
     bot.action.bridge(reverse_long_dir, options.length-2, plank, 0)
+    bot.progress.increment()
 
     const at = (r) => bot.dir.block_relative(options.short_direction, r, -1, 1)
 
@@ -143,7 +169,7 @@ function place_water() {
         bot.action.interact_block(at(0), 100)
         bot.action.wait(500)
         if (i !== 0 && i !== options.length-3) {
-            bot.item.select(bucket, 5)
+            bot.item.select(bucket, 4)
             bot.item.unselect()
             bot.action.interact_block(at(0), 100)
         }
@@ -159,6 +185,5 @@ function place_water() {
     bot.action.move(reverse_long_dir, 1)
     bot.action.mine(reverse_long_dir, 90, 500)
     bot.action.move_mine(reverse_long_dir, options.length-3, true, 0)
+    bot.progress.increment()
 }
-
-

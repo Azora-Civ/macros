@@ -6,12 +6,14 @@ function Farm(pos, run, name=null, args=null) { return { pos, run, name, args };
 function add_farm(farm) { farms.set(pos_key(farm.pos), farm); }
 
 function add_farms(n, offset, farm, full_pos=null) {
+    offset = typeof offset === "number" ? vec3(0, offset, 0) : offset
+
     if (full_pos)
         add_farm(Farm(full_pos, require("./farms/elevator_stacked.js"), null, n))
 
     for (let i = 0; i < n; i++) {
         const clone = { ...farm }
-        clone.pos = clone.pos.add(vec3(0, offset*i, 0))
+        clone.pos = clone.pos.add(offset.scale(i))
         if (clone.name) clone.name += ` L${i+1}`
         add_farm(clone)
     }
@@ -24,6 +26,20 @@ add_farms(13, 3, Farm(vec3(9551, 88, 2092), require("./farms/complex/melon.js"))
 // ===== Dark Forest Complex =====
 add_farms(4, 10, Farm(vec3(8964, 103, 1406), require("./farms/df_complex/jungle.js"), "DF Jungle"), vec3(8964, 20, 1406))
 add_farms(3, 11, Farm(vec3(8934, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"), vec3(8934, 20, 1408))
+
+// ===== Savanna Complex =====
+add_farms(9, vec3(9,0,0), Farm(vec3(8903, 75, 2555), () => require("./utils/water_catch.js")({
+    length:94,
+    wood: "acacia",
+    long_direction: bot.dir.SOUTH,
+    short_direction: bot.dir.EAST
+}), "Savanna oak water E"))
+add_farms(7, vec3(-9,0,0), Farm(vec3(8890, 75, 2555), () => require("./utils/water_catch.js")({
+    length:94,
+    wood: "acacia",
+    long_direction: bot.dir.SOUTH,
+    short_direction: bot.dir.WEST
+}), "Savanna oak water W"))
 
 // ===== Azuna =====
 add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
