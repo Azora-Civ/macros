@@ -77,10 +77,6 @@ function finish() {
 
     if (state.n) bot.progress.finish()
     if (state.old_ctb) bot.commands.ctb(true)
-
-    if (stack.length === 0) {
-        bot.world.leave()
-    }
 }
 
 module.exports = bot

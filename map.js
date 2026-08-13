@@ -1,4 +1,5 @@
 const farms = new Map()
+const stack = []
 const vec3 = bot.math.vec
 
 function pos_key(pos) { return `${pos.x},${pos.y},${pos.z}`; }
@@ -51,6 +52,8 @@ add_farms(8, 10, Farm(vec3(8964, 143, 1401), require("./utils/build_tree_farm.js
 // dark oak
 add_farms(4, 11, Farm(vec3(8934, 103, 1416), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 9, row_dir: bot.dir.SOUTH, col_dir: bot.dir.EAST, offset: 8, is_big: true}))
 
+
+
 module.exports = function () {
     const player_pos = bot.math.floor(Player.getPlayer().getPos())
     const key = pos_key(player_pos)
@@ -58,13 +61,15 @@ module.exports = function () {
     let match = farms.get(key)
 
     if (!match && debug) {
-        match = {run: require("./utils/debug.js")}
+        match = Farm(bot.PLAYER.getPos(), require("./utils/debug.js"))
     }
 
     if (!match) {
         bot.logger.info("Couldn't find a farm at this position.")
         return
     }
+
+    stack.push(match)
 
     if (match.name) {
         Chat.say(`/g AzoraFarms started farming: ${match.name}`)
@@ -78,5 +83,11 @@ module.exports = function () {
 
     if (match.name) {
         Chat.say(`/g AzoraFarms finished farming: ${match.name}`)
+    }
+
+    stack.pop()
+
+    if (stack.length === 0) {
+        bot.world.leave()
     }
 }
