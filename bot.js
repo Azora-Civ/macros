@@ -18,6 +18,9 @@ const { Event } = require("./lib/util")
  * @property {typeof import("./lib/ui")} ui
  */
 
+let player = Player.getPlayer()
+let inv = Player.openInventory()
+
 const base = {
     start, finish,
 
@@ -31,7 +34,17 @@ const base = {
 
     on_repeat: new Event(),
     PLAYER: Player.getPlayer(),
-    INVENTORY: Player.openInventory()
+    INVENTORY: Player.openInventory(),
+
+    player() {
+        player = Player.getPlayer() ?? player
+        return player
+    },
+
+    inv() {
+        inv = Player.openInventory() ?? inv
+        return inv
+    }
 }
 
 /** @type {Bot & typeof base} */

@@ -16,20 +16,31 @@ const WEST = bot.dir.WEST
 const SOUTH = bot.dir.SOUTH
 const EAST = bot.dir.EAST
 
-module.exports = function (args) {
-   options = args
+module.exports = function (offset=5, rows=5, cols=5, row_dir=bot.dir.NORTH, col_dir=bot.dir.WEST, is_big=false) {
+   options = {
+       offset, is_big,
+       rows, row_dir,
+       cols, col_dir
+   }
 
     bot.start(options.rows * options.cols, true)
     bot.check.has_stone(true)
     bot.check.hold_min_height(true)
+    bot.commands.ctf()
+
+    const reverse_row_dir = bot.dir.turn_back(row_dir)
+    const reverse_col_dir = bot.dir.turn_back(col_dir)
 
     for (let i = 0; i < options.rows; i++) {
         let is_first = i===0
-        let row_dir = i % 2 === 0 ? options.row_dir : bot.dir.turn_back(options.row_dir)
+        let row_dir = i % 2 === 0 ? options.row_dir : reverse_row_dir
         let col_dir = options.col_dir
 
         do_row(row_dir, col_dir, is_first)
     }
+
+    bot.action.move(reverse_col_dir, offset*(rows-1))
+    bot.action.move(reverse_row_dir, (rows % 2 === 0 ? 1 : cols) * offset)
 
     bot.finish()
 }

@@ -2,8 +2,17 @@ const farms = new Map()
 const stack = []
 const vec3 = bot.math.vec
 
+const tree_farm = require("./utils/tree_farm")
+const build_tree_farm = require("./utils/build_tree_farm")
+const water_catch = require("./utils/water_catch")
+
 function pos_key(pos) { return `${pos.x},${pos.y},${pos.z}`; }
-function Farm(pos, run, name=null, args=null) { return { pos, run, name, args }; }
+function Farm(pos, run, name=null, args=null, prevent_logout= false) {
+    if (typeof run === "object") {
+        return {pos, name, args, prevent_logout, ...run}
+    }
+    return { pos, run, name, args, prevent_logout };
+}
 function add_farm(farm) { farms.set(pos_key(farm.pos), farm); }
 
 function add_farms(n, offset, farm, full_pos=null) {
@@ -29,29 +38,33 @@ add_farms(4, 10, Farm(vec3(8964, 103, 1406), require("./farms/df_complex/jungle.
 add_farms(3, 11, Farm(vec3(8934, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"), vec3(8934, 20, 1408))
 
 // ===== Savanna Complex =====
-add_farms(9, vec3(9,0,0), Farm(vec3(8903, 75, 2555), () => require("./utils/water_catch.js")({
-    length:94,
-    wood: "acacia",
-    long_direction: bot.dir.SOUTH,
-    short_direction: bot.dir.EAST
-}), "Savanna oak water E"))
-add_farms(7, vec3(-9,0,0), Farm(vec3(8890, 75, 2555), () => require("./utils/water_catch.js")({
-    length:94,
-    wood: "acacia",
-    long_direction: bot.dir.SOUTH,
-    short_direction: bot.dir.WEST
-}), "Savanna oak water W"))
+add_farms(
+    11, 9, Farm(vec3(8885, 79, 2560),
+    () => build_tree_farm(6, 10, 15, bot.dir.SOUTH, bot.dir.WEST, false),
+    "Savanna con. acacia")
+)
+add_farms(
+    10, 9, Farm(vec3(8885, 79, 2554),
+        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 10, 15, 6, 0, "acacia"),
+        "Savanna Acacia")
+)
+add_farms(
+    11, 9, Farm(vec3(8970, 79, 2559),
+        () => build_tree_farm(5, 17, 18, bot.dir.SOUTH, bot.dir.WEST, false),
+        "Savanna con. oak")
+)
+add_farms(
+    10, 9, Farm(vec3(8970, 79, 2554),
+        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 17, 18, 5, 1800, "oak"),
+        "Savanna Oak")
+)
+add_farms(15, vec3(-9,0,0), Farm(vec3(8997, 78, 2545), () => water_catch({short_direction:bot.dir.WEST, long_direction:bot.dir.NORTH, length:34, wood:"acacia"})))
 
 // ===== Azuna =====
 add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
 
 // ===== Loose stuff =====
 add_farm(Farm(vec3(9426, 115, 1735), require("./farms/bleeze_wait.js")))
-// jungle
-add_farms(8, 10, Farm(vec3(8964, 143, 1401), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 13, row_dir: bot.dir.NORTH, col_dir: bot.dir.WEST, offset: 5, is_big: false}))
-// dark oak
-add_farms(4, 11, Farm(vec3(8934, 103, 1416), require("./utils/build_tree_farm.js"), null, { rows: 10, cols: 9, row_dir: bot.dir.SOUTH, col_dir: bot.dir.EAST, offset: 8, is_big: true}))
-
 
 
 module.exports = function () {
@@ -72,7 +85,7 @@ module.exports = function () {
     stack.push(match)
 
     if (match.name) {
-        Chat.say(`/g AzoraFarms started farming: ${match.name}`)
+        Chat.say(`/g AzoraFarms started: ${match.name}`)
     }
 
     if (match.args) {
@@ -82,12 +95,12 @@ module.exports = function () {
     }
 
     if (match.name) {
-        Chat.say(`/g AzoraFarms finished farming: ${match.name}`)
+        Chat.say(`/g AzoraFarms finished: ${match.name}`)
     }
 
     stack.pop()
 
-    if (stack.length === 0) {
+    if (stack.length === 0 && !match.prevent_logout) {
         bot.world.leave()
     }
 }

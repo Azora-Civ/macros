@@ -9,7 +9,7 @@
     const reverse_row_dir = bot.dir.turn_back(row_dir)
     const reverse_col_dir = bot.dir.turn_back(col_dir)
 
-    const do_tree = dir => bot.action.complex.do_tree(dir, offset, {
+    let do_tree = dir => bot.action.complex.do_tree(dir, offset, {
         do_grow: false,
         grow_time: 0,
         do_mine: true,
@@ -20,9 +20,15 @@
         sapling: sapling
     })
 
+    if (wood === "acacia") {
+        do_tree = bot.action.complex.do_acacia_tree(
+            offset, bot.item.axe(), mine_time < 200
+        )
+    }
+
     function do_row(initial_dir, dir) {
         do_tree(initial_dir)
-        for (let i = 0; i < cols; i++) {
+        for (let i = 0; i < cols-1; i++) {
             do_tree(dir)
         }
 

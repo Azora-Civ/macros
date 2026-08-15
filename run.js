@@ -1,127 +1,97 @@
+/*
+ * Info: This is Azora's JsMacros script that runs any Azoran farm (and more).
+ * Source: https://github.com/Azora-Civ/macros
+ * Author(s): borito185
+ */
+
 // ===== Settings =====
 debug = true;
 do_discord_pings = true; // only for registered Azorans
 // ===== Settings =====
 
-const File = Java.type("java.io.File");
-const Files = Java.type("java.nio.file.Files");
-const Paths = Java.type("java.nio.file.Paths");
-const URL = Java.type("java.net.URL");
-const StandardCopyOption = Java.type("java.nio.file.StandardCopyOption");
-const ZipInputStream = Java.type("java.util.zip.ZipInputStream");
-const BufferedInputStream = Java.type("java.io.BufferedInputStream");
-const BufferedOutputStream = Java.type("java.io.BufferedOutputStream");
-const FileOutputStream = Java.type("java.io.FileOutputStream");
+update_from_source("Azora-Civ/macros")
+start("main.js")
 
-function deleteDir(file) {
-    if (file.isDirectory()) {
-        const files = file.listFiles()
-        if (files) for (let f of files) deleteDir(f)
-    }
+
+function get_path() {
+    const Paths = Java.type("java.nio.file.Paths");
+    return debug
+        ? Paths.get(".")
+        : Paths.get("config", "jsMacros", "cache", "azora").toAbsolutePath()
+}
+
+function start(loc) {
+    return require(get_path().resolve(loc).toString())
+}
+
+function read(path) {
+    const Files = Java.type("java.nio.file.Files");
+    return path.toFile().exists() ? Files.readString(path) : null
+}
+
+function remove_old(file) {
+    if (file.isDirectory())
+        file.listFiles()?.forEach(remove_old)
     file.delete()
 }
 
-function get_path() {
-    if (debug) return "."
+function update_from_source(repo) {
+    if (debug) return
 
-    return Paths.get("").toAbsolutePath()
-        .resolve("config")
-        .resolve("jsMacros")
-        .resolve("cache")
-        .resolve("azora")
-}
-
-function load(loc) {
-    return require(get_path() + File.separator + loc)
-}
-
-function readFileIfExists(path) {
-    const f = path.toFile()
-    if (!f.exists()) return null
-    return new java.lang.String(
-        Files.readAllBytes(path),
-        java.nio.charset.StandardCharsets.UTF_8
-    )
-}
-
-function reload_from_source() {
-    if (debug) return;
-
-    const api = `https://api.github.com/repos/Azora-Civ/macros/releases/latest`
-    const connection = new URL(api).openConnection()
+    // Connect to github and fetch latest release
+    const URL = Java.type("java.net.URL");
+    const connection = new URL(
+        `https://api.github.com/repos/${repo}/releases/latest`
+    ).openConnection()
     connection.setRequestProperty("User-Agent", "JsMacros")
+    const release = JSON.parse(
+        new java.util.Scanner(connection.getInputStream())
+            .useDelimiter("\\A")
+            .next()
+    )
 
-    const scanner = new java.util.Scanner(connection.getInputStream()).useDelimiter("\\A")
-    const json = scanner.hasNext() ? scanner.next() : ""
-    scanner.close()
-
-    const release = JSON.parse(json)
-    if (!release.zipball_url)
-        throw "No release zipball found"
-
+    // compare latest with local version
     const dir = get_path()
-    Files.createDirectories(dir)
-    const versionPath = dir.resolve("version.txt")
-    const storedVersion = readFileIfExists(versionPath)
-    const latestVersion = release.tag_name
-
-    // 🔹 If same version → skip download
-    if (storedVersion && storedVersion.trim() === latestVersion) {
+    const version = dir.resolve("version.txt")
+    if (read(version)?.trim() === release.tag_name)
         return
-    }
 
-    // 🔹 Clean old cache
-    const dirFile = dir.toFile()
-    if (dirFile.exists()) deleteDir(dirFile)
+
+    const StandardCopyOption = Java.type("java.nio.file.StandardCopyOption");
+    const ZipInputStream = Java.type("java.util.zip.ZipInputStream");
+    const Files = Java.type("java.nio.file.Files");
+
+    // remove old version
+    remove_old(dir.toFile())
+
+    // download new version as zip
     Files.createDirectories(dir)
+    const zip = dir.resolve("source.zip")
+    const input = new URL(release.zipball_url).openStream()
+    Files.copy(input, zip, StandardCopyOption.REPLACE_EXISTING)
+    input.close()
 
-    const zipPath = dir.resolve("source.zip")
-
-    const inStream = new URL(release.zipball_url).openStream()
-    Files.copy(inStream, zipPath, StandardCopyOption.REPLACE_EXISTING)
-    inStream.close()
-
-    const zis = new ZipInputStream(new BufferedInputStream(Files.newInputStream(zipPath)));
-
-    let entry;
-    let rootFolder = null;
-
+    // unpack zip
+    const zis = new ZipInputStream(Files.newInputStream(zip))
+    let entry, root
     while ((entry = zis.getNextEntry()) !== null) {
-        const name = entry.getName();
+        root ??= entry.getName().split("/")[0]
 
-        // detect root folder once
-        if (!rootFolder)
-            rootFolder = name.split("/")[0];
+        const name = entry.getName().substring(root.length + 1)
+        if (!name) continue
 
-        // strip root folder from path
-        let stripped = name.substring(rootFolder.length + 1);
-
-        if (!stripped) continue; // skip empty root entry
-
-        const outPath = dir.resolve(stripped);
+        const out = dir.resolve(name)
 
         if (entry.isDirectory()) {
-            Files.createDirectories(outPath);
-        } else {
-            Files.createDirectories(outPath.getParent());
-
-            const out = new BufferedOutputStream(
-                new FileOutputStream(outPath.toFile())
-            );
-
-            let b;
-            while ((b = zis.read()) !== -1)
-                out.write(b);
-
-            out.close();
+            Files.createDirectories(out)
+            continue
         }
+
+        Files.createDirectories(out.getParent())
+        Files.copy(zis, out, StandardCopyOption.REPLACE_EXISTING)
     }
+    zis.close()
 
-    zis.close();
-
-    // save version
-    Files.writeString(versionPath, latestVersion);
+    // write new version identifier
+    Files.writeString(version, release.tag_name)
 }
-
-reload_from_source()
-load("main.js")

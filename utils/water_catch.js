@@ -40,6 +40,7 @@ module.exports = function (args) {
     bot.start(16, null)
     bot.check.hold_min_height(true)
     bot.check.has_stone(true)
+    bot.commands.ctf()
 
     init()
 
@@ -70,6 +71,8 @@ function build_floor() {
         const item = [6, 7].includes(i) ? ice : plank
         const slot = [6, 7].includes(i) ? 3 : 0
 
+        if (item === plank) ensure_planks(options.length)
+
         if (i !== 0) {
             bot.action.bridge(options.short_direction, 1, item, slot)
         }
@@ -81,6 +84,8 @@ function build_floor() {
 }
 
 function build_wall() {
+    ensure_planks(18)
+
     bot.action.pillar_up(1, plank, 0)
     bot.action.bridge(reverse_short_dir, 8, plank, 0)
     bot.action.pillar_up(1, plank, 0)
@@ -154,9 +159,16 @@ function build_water_railing() {
     bot.progress.increment()
 }
 
+function ensure_planks(n) {
+    while (bot.item.count(plank) < n) {
+        bot.item.craft(plank, true)
+    }
+}
+
 function place_water() {
     bot.check.hold_min_height(false)
     bot.action.move(reverse_short_dir, 1)
+    ensure_planks(options.length-2)
     bot.action.bridge(reverse_long_dir, options.length-2, plank, 0)
     bot.progress.increment()
 
