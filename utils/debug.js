@@ -5,22 +5,16 @@
 
     // require("./measure")()
 
-    let pos = bot.player().getPos()
-    const samples = []
-    const window = 5
+    // take a snapshot of the inv
+    // create a map of item.toString() -> [slot positions]
+    const snapshot = bot.container.get_snapshot()
 
-    while (true) {
-        Client.waitTick(20)
-
-        const new_pos = bot.player().getPos()
-        const distance = bot.math.distance(pos, new_pos)
-        pos = new_pos
-
-        samples.push(distance)
-        if (samples.length > window) samples.shift()
-
-        const speed = samples.reduce((a, b) => a + b, 0) / samples.length
-        bot.ui.action_bar(`Speed: ${speed.toFixed(2)} blocks/s`)
+    // wait a bit for testing so i can reshuffle etc
+    bot.toggle_pause(true)
+    while (bot.is_paused()) {
+        bot.ui.action_bar("waiting...")
     }
 
+    // create maps: item -> slots
+    bot.container.set_snapshot(snapshot)
 }

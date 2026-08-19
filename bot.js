@@ -16,6 +16,7 @@ const { Event } = require("./lib/util")
  * @property {typeof import("./lib/check")} check
  * @property {typeof import("./lib/world")} world
  * @property {typeof import("./lib/ui")} ui
+ * @property {typeof import("./lib/container")} container
  */
 
 let player = Player.getPlayer()
@@ -64,7 +65,8 @@ const libs = [
     "commands",
     "check",
     "world",
-    "ui"
+    "ui",
+    "container"
 ]
 
 for (const lib of libs) {
@@ -73,8 +75,9 @@ for (const lib of libs) {
 
 const stack = []
 function start(n = null, ctb = false) {
+    const snapshot = stack.length === 0 ? bot.container.get_snapshot() : null
     const state = {
-        n, ctb
+        n, ctb, snapshot
     }
     stack.push(state)
 
@@ -90,6 +93,8 @@ function finish(do_logout=true) {
 
     if (state.n) bot.progress.finish()
     if (state.old_ctb) bot.commands.ctb(true)
+
+    if (state.snapshot) bot.container.set_snapshot(state.snapshot)
 
     if (stack.length === 0 && do_logout) {
         bot.world.leave()
