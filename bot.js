@@ -85,11 +85,15 @@ function start(n = null, ctb = false) {
     if (stack.length === 1) bot.logger.info("Script started!");
 }
 
-function finish() {
+function finish(do_logout=true) {
     const state = stack.pop()
 
     if (state.n) bot.progress.finish()
     if (state.old_ctb) bot.commands.ctb(true)
+
+    if (stack.length === 0 && do_logout) {
+        bot.world.leave()
+    }
 }
 
 module.exports = bot

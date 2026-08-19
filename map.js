@@ -1,17 +1,16 @@
 const farms = new Map()
-const stack = []
 const vec3 = bot.math.vec
 
-const tree_farm = require("./utils/tree_farm")
-const build_tree_farm = require("./utils/build_tree_farm")
-const water_catch = require("./utils/water_catch")
+const tree_farm = require("./farms/tree_farm")
+const build_tree_farm = require("./farms/build_tree_farm")
+const water_catch = require("./farms/build_item_collect")
 
 function pos_key(pos) { return `${pos.x},${pos.y},${pos.z}`; }
-function Farm(pos, run, name=null, args=null, prevent_logout= false) {
+function Farm(pos, run, name=null, args=null) {
     if (typeof run === "object") {
-        return {pos, name, args, prevent_logout, ...run}
+        return {pos, name, args, ...run}
     }
-    return { pos, run, name, args, prevent_logout };
+    return { pos, run, name, args };
 }
 function add_farm(farm) { farms.set(pos_key(farm.pos), farm); }
 
@@ -45,7 +44,7 @@ add_farms(
 )
 add_farms(
     10, 9, Farm(vec3(8885, 79, 2554),
-        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 10, 15, 6, 0, "acacia"),
+        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 10, 15, 6, 500, "acacia"),
         "Savanna Acacia")
 )
 add_farms(
@@ -54,11 +53,11 @@ add_farms(
         "Savanna con. oak")
 )
 add_farms(
-    10, 9, Farm(vec3(8970, 79, 2554),
+    5, 9, Farm(vec3(8970, 79, 2554),
         () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 17, 18, 5, 1800, "oak"),
-        "Savanna Oak")
+        "Savanna Oak"), vec3(8970, -57, 2554)
 )
-add_farms(15, vec3(-9,0,0), Farm(vec3(8997, 78, 2545), () => water_catch({short_direction:bot.dir.WEST, long_direction:bot.dir.NORTH, length:34, wood:"acacia"})))
+add_farm(Farm(vec3(8995, 70, 2530), require("./farms/savanna/melon"), "Savanna Melon"))
 
 // ===== Azuna =====
 add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
@@ -82,8 +81,6 @@ module.exports = function () {
         return
     }
 
-    stack.push(match)
-
     if (match.name) {
         Chat.say(`/g AzoraFarms started: ${match.name}`)
     }
@@ -96,11 +93,5 @@ module.exports = function () {
 
     if (match.name) {
         Chat.say(`/g AzoraFarms finished: ${match.name}`)
-    }
-
-    stack.pop()
-
-    if (stack.length === 0 && !match.prevent_logout) {
-        bot.world.leave()
     }
 }

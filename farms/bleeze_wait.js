@@ -22,13 +22,13 @@ module.exports = function () {
     bot.on_repeat.set("bleeze", null)
 
     bot.logger.info(`§6⚠⚠⚠ Bleeze detected! ⚠⚠⚠`)
-    bot.logger.private_alert(`Bleeze detected!`)
     for (let i = 0; i < 8; i++) {
         Client.waitTick(4)
         World.playSound("minecraft:block.note_block.chime", 1, .05);
     }
 
-    bot.finish()
+    bot.finish(false)
+    bot.world.leave(() => bot.logger.private_alert(`Bleeze detected!`))
 }
 
 function check_bleeze(iter) {

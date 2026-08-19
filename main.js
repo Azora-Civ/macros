@@ -1,11 +1,12 @@
 bot = require("./bot.js")
 
 const HOLD_TIME_MILLIS = 1000
+const RUNNING_KEY = `running:${context.getCtx().getFile()}`
 
 function is_already_running() {
     const current = context.getCtx().getFile().toString()
 
-    return JsMacros.getOpenContexts()
+    return GlobalVars.getBoolean(RUNNING_KEY) && JsMacros.getOpenContexts()
         .filter(ctx => ctx.getFile().toString() === current && !ctx.isContextClosed())
         .length > 1
 }
@@ -52,5 +53,11 @@ if (is_already_running()) {
     return
 }
 
-bot.toggle_pause(false)
-require("./map.js")()
+GlobalVars.putBoolean(RUNNING_KEY, true)
+try {
+    bot.toggle_pause(false)
+    require("./map.js")()
+}
+finally {
+    GlobalVars.putBoolean(RUNNING_KEY, false)
+}

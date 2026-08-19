@@ -4,7 +4,7 @@
     const leaves = bot.item.of(wood+"_leaves")
     const stick = bot.item.of("stick")
     const apple = bot.item.of("apple")
-    const drops = [log, leaves, stick, apple]
+    const drops = [log, stick, apple]
 
     const reverse_row_dir = bot.dir.turn_back(row_dir)
     const reverse_col_dir = bot.dir.turn_back(col_dir)
@@ -35,6 +35,7 @@
         // drop all
         bot.look.towards(bot.dir.turn_back(dir)-15, 0)
         drops.forEach(bot.item.drop_all_of)
+        bot.item.drop_most_of(leaves)
     }
 
 

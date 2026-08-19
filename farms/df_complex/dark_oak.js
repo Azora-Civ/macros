@@ -21,9 +21,11 @@ module.exports = function () {
         do_row(initial_dir, row_dir)
 
         //drop the stuff
-        bot.look.towards(row_dir-150, 50)
-        drops.forEach(bot.item.drop_all_of)
-        bot.item.drop_most_of(wood)
+        if (i % 2 === 1) {
+            bot.look.towards(40, 50)
+            drops.forEach(bot.item.drop_all_of)
+            bot.item.drop_most_of(wood)
+        }
     }
 
     bot.look.forward()
