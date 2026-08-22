@@ -1,5 +1,6 @@
 ﻿module.exports = function () {
     bot.item.empty(0)
+    bot.item.unselect()
     bot.action.elevator(1)
     bot.action.interact(bot.dir.EAST, 0, 100)
     bot.look.towards(bot.dir.WEST, 0)

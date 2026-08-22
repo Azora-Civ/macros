@@ -28,7 +28,11 @@ module.exports = function () {
     }
 
     bot.finish(false)
-    bot.world.leave(() => bot.logger.private_alert(`Bleeze detected!`))
+
+    bot.move.toggle(false)
+    if (bot.control.loop(() => !bot.move.is_moving(), {timeout: 10000})) {
+        bot.logger.private_alert(`Bleeze detected!`)
+    }
 }
 
 function check_bleeze(iter) {

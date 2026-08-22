@@ -29,11 +29,15 @@ function add_farms(n, offset, farm, full_pos=null) {
 }
 
 // ===== Badlands Complex =====
-add_farms(9, 9, Farm(vec3(9557, 98, 2152), require("./farms/complex/oak.js"), "Badlands Oak"), vec3(9557, 73, 2152))
+add_farms(9, 9, Farm(vec3(9557, 98, 2152),
+    () => tree_farm(bot.dir.EAST, bot.dir.NORTH, 21, 13, 5, true, 2000, true, "oak"), "Badlands Oak"),
+    vec3(9557, 73, 2152))
 add_farms(13, 3, Farm(vec3(9551, 88, 2092), require("./farms/complex/melon.js")))
 
 // ===== Dark Forest Complex =====
-add_farms(4, 10, Farm(vec3(8964, 103, 1406), require("./farms/df_complex/jungle.js"), "DF Jungle"), vec3(8964, 20, 1406))
+add_farms(4, 10, Farm(vec3(8964, 103, 1406), () => tree_farm(
+    bot.dir.NORTH, bot.dir.EAST, 10, 13, 5, true, true, "jungle"
+), "DF Jungle"), vec3(8964, 20, 1406))
 add_farms(3, 11, Farm(vec3(8934, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"), vec3(8934, 20, 1408))
 
 // ===== Savanna Complex =====
@@ -44,7 +48,7 @@ add_farms(
 )
 add_farms(
     10, 9, Farm(vec3(8885, 79, 2554),
-        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 10, 15, 6, 500, "acacia"),
+        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 10, 15, 6, true, 500, true, "acacia"),
         "Savanna Acacia")
 )
 add_farms(
@@ -54,7 +58,7 @@ add_farms(
 )
 add_farms(
     5, 9, Farm(vec3(8970, 79, 2554),
-        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 17, 18, 5, 1800, "oak"),
+        () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 17, 18, 5, true, 1800, true, "oak"),
         "Savanna Oak"), vec3(8970, -57, 2554)
 )
 add_farm(Farm(vec3(8995, 70, 2530), require("./farms/savanna/melon"), "Savanna Melon"))
