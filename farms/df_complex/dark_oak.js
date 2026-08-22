@@ -10,7 +10,8 @@ let dark_oak_like = bot.action.complex.do_dark_oak_like({
     sapling: sapling
 })
 module.exports = function () {
-    let drops = [bot.item.of("apple"), bot.item.of("stick"), bot.item.of("dark_oak_leaves")]
+    const drops = [bot.item.of("apple"), bot.item.of("stick")]
+    const leaves = bot.item.of("dark_oak_leaves")
 
     bot.start(rows * cols, false)
 
@@ -25,6 +26,7 @@ module.exports = function () {
             bot.look.towards(40, 50)
             drops.forEach(bot.item.drop_all_of)
             bot.item.drop_most_of(wood)
+            bot.item.drop_most_of(leaves)
         }
     }
 
