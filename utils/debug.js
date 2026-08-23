@@ -7,14 +7,9 @@
 
     // take a snapshot of the inv
     // create a map of item.toString() -> [slot positions]
-    const snapshot = bot.container.get_snapshot()
 
-    // wait a bit for testing so i can reshuffle etc
-    bot.toggle_pause(true)
-    while (bot.is_paused()) {
-        bot.ui.action_bar("waiting...")
-    }
 
-    // create maps: item -> slots
-    bot.container.set_snapshot(snapshot)
 }
+
+
+

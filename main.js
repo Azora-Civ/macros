@@ -56,6 +56,12 @@ if (is_already_running()) {
 GlobalVars.putBoolean(RUNNING_KEY, true)
 try {
     bot.toggle_pause(false)
+
+    if (bot.player().getPos().y < 20) {
+        require("./utils/auto_mining")()
+        return
+    }
+
     require("./map.js")()
 }
 finally {

@@ -15,7 +15,7 @@ module.exports = function () {
     bot.control.loop(() => !seen_bleeze && !bot.is_paused())
 
     if (bot.is_paused()) {
-        bot.finish()
+        bot.finish(false)
         return
     }
 
