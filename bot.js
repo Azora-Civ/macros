@@ -17,6 +17,8 @@ const { Event } = require("./lib/util")
  * @property {typeof import("./lib/world")} world
  * @property {typeof import("./lib/ui")} ui
  * @property {typeof import("./lib/container")} container
+ * @property {typeof import("./lib/manage")} manage
+ * @property {typeof import("./lib/parse")} parse
  */
 
 let player = Player.getPlayer()
@@ -66,7 +68,9 @@ const libs = [
     "check",
     "world",
     "ui",
-    "container"
+    "container",
+    "manage",
+    "parse",
 ]
 
 for (const lib of libs) {

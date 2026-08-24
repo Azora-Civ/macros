@@ -1,15 +1,6 @@
 bot = require("./bot.js")
 
 const HOLD_TIME_MILLIS = 1000
-const RUNNING_KEY = `running:${context.getCtx().getFile()}`
-
-function is_already_running() {
-    const current = context.getCtx().getFile().toString()
-
-    return GlobalVars.getBoolean(RUNNING_KEY) && JsMacros.getOpenContexts()
-        .filter(ctx => ctx.getFile().toString() === current && !ctx.isContextClosed())
-        .length > 1
-}
 
 function is_holding() {
     const key = event.key
@@ -27,43 +18,23 @@ function is_holding() {
     return true
 }
 
-function kill_running() {
-    Chat.log("Stopping running script");
-
-
-    const current = context.getCtx().getFile().toString()
-
-    Player.openInventory().openGui();
-    Player.openInventory().close();
-    JsMacros.getOpenContexts().forEach(c => {
-        if (c == context.getCtx()) return;
-        if (c.getFile().toString() !== current) return;
-
-        c.closeContext();
-    });
-}
 
 if (is_holding()) {
-    kill_running()
+    bot.manage.kill_running()
+    bot.manage.load_commands()
     return
 }
 
-if (is_already_running()) {
+if (bot.manage.is_already_running()) {
     bot.toggle_pause()
     return
 }
 
-GlobalVars.putBoolean(RUNNING_KEY, true)
+bot.manage.set_is_running(true)
 try {
-    bot.toggle_pause(false)
-
-    if (bot.player().getPos().y < 20) {
-        require("./utils/auto_mining")()
-        return
-    }
-
+    bot.manage.load_commands()
     require("./map.js")()
 }
 finally {
-    GlobalVars.putBoolean(RUNNING_KEY, false)
+    bot.manage.set_is_running(false)
 }

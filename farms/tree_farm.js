@@ -52,6 +52,7 @@
     }
 
     bot.start(rows * cols, false)
+    bot.check.hold_min_height(true)
 
     for (let i = 0; i < rows; i++) {
         const initial_dir = i === 0 ? row_dir : col_dir
