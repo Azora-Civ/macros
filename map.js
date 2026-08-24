@@ -36,7 +36,7 @@ add_farms(13, 3, Farm(vec3(9551, 88, 2092), require("./farms/complex/melon.js"))
 
 // ===== Dark Forest Complex =====
 add_farms(4, 10, Farm(vec3(8964, 103, 1406), () => tree_farm(
-    bot.dir.NORTH, bot.dir.EAST, 10, 13, 5, true, true, "jungle"
+    bot.dir.NORTH, bot.dir.EAST, 10, 13, 5, true, 2800, true, "jungle"
 ), "DF Jungle"), vec3(8964, 20, 1406))
 add_farms(3, 11, Farm(vec3(8934, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"), vec3(8934, 20, 1408))
 
