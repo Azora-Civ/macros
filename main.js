@@ -8,7 +8,7 @@ function is_holding() {
     let held_time = 0;
 
     while (held_time < HOLD_TIME_MILLIS) {
-        const is_pressed = bot.input.is_pressed(key)
+        const is_pressed = bot.input.key_held(key)
         if (!is_pressed) return false
 
         Client.waitTick(2)

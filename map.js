@@ -4,6 +4,7 @@ const vec3 = bot.math.vec
 const tree_farm = require("./farms/tree_farm")
 const build_tree_farm = require("./farms/build_tree_farm")
 const water_catch = require("./farms/build_item_collect")
+const build_melon_bed = require("./farms/build_melon_bed")
 
 function pos_key(pos) { return `${pos.x},${pos.y},${pos.z}`; }
 function Farm(pos, run, name=null, args=null) {
@@ -34,11 +35,15 @@ add_farms(9, 9, Farm(vec3(9557, 98, 2152),
     vec3(9557, 73, 2152))
 add_farms(13, 3, Farm(vec3(9551, 88, 2092), require("./farms/complex/melon.js")))
 
+
+
 // ===== Dark Forest Complex =====
 add_farms(4, 10, Farm(vec3(8964, 103, 1406), () => tree_farm(
     bot.dir.NORTH, bot.dir.EAST, 10, 13, 5, true, 2800, true, "jungle"
 ), "DF Jungle"), vec3(8964, 20, 1406))
 add_farms(3, 11, Farm(vec3(8934, 103, 1408), require("./farms/df_complex/dark_oak.js"), "DF Dark Oak"), vec3(8934, 20, 1408))
+
+
 
 // ===== Savanna Complex =====
 add_farms(
@@ -62,12 +67,21 @@ add_farms(
         "Savanna Oak"), vec3(8970, -57, 2554)
 )
 add_farm(Farm(vec3(8995, 70, 2530), require("./farms/savanna/melon"), "Savanna Melon"))
+add_farms(
+    6, vec3(0, 0, -5), Farm(vec3(8991, 86, 2542), () => build_melon_bed(bot.dir.WEST, bot.dir.NORTH, 133, bot.item.of("melon_seed"), bot.item.of("diamond_hoe")), "Savanna Melon con H2")
+)
+add_farms(
+    6, vec3(0, 0, -5), Farm(vec3(8991, 90, 2542), () => build_melon_bed(bot.dir.WEST, bot.dir.NORTH, 133, bot.item.of("melon_seed"), bot.item.of("diamond_hoe")), "Savanna Melon con H3")
+)
 
 // ===== Azuna =====
 add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
 
+
+
 // ===== Loose stuff =====
 add_farm(Farm(vec3(9426, 115, 1735), require("./farms/bleeze_wait.js")))
+
 
 
 module.exports = function () {

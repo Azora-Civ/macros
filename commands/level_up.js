@@ -1,8 +1,9 @@
 ﻿module.exports = {
     help: "Uses emeralds to get to a level of xp. Either specify a level or hold a tool to use its repair level. Not really efficient rn tbh. But it works well for 30",
     name: __filename
-        .replace(/^.*[\\/]/, "")
-        .replace(/\.[^.]+$/, ""), // defaults to filename w/o extension
+        .replace(/^.*[\\/]commands[\\/]/, "")
+        .replace(/\.[^.]+$/, "")
+        .replace(/[\\/]/g, " "), // defaults to filename w/o extension
 
     /**
      * @param {(callback: (builder: CommandBuilder) => CommandBuilder) => any} with_args

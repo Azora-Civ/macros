@@ -15,5 +15,9 @@
 
     run(arg) {
         // const my_arg = arg("my_arg", null)
+        let pos = bot.player().getPos()
+        pos = bot.math.floor(pos)
+        Client.setClipboard(`${pos.x}, ${pos.y}, ${pos.z}`);
+        bot.logger.info("Copied position to clipboard.")
     },
 }

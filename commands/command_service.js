@@ -1,27 +1,30 @@
 ﻿debug = true // global expected by the bot
-bot = require("../bot.js")
+do_discord_pings = true;
 
-const cmds = Chat.getCommandManager()
-cmds.unregisterCommand("bot")
+const cmd_manager = Chat.getCommandManager()
+cmd_manager.unregisterCommand("bot")
 
 function builder(name) {
     const parts = name.split(" ")
-    let builder = cmds.createCommandBuilder("bot")
+    let builder = cmd_manager.createCommandBuilder("bot")
     for (const part of parts) {
         builder = builder.literalArg(part)
     }
     return builder
 }
 
-const targets = [
-    "./auto_mine.js",
-    "./level_up.js",
-    "./layered.js",
+
+const cmds = [
+    require("./auto_mine.js"),
+    require("./level_up.js"),
+    require("./layered.js"),
+    require("./ice_road.js"),
+    require("./debug/speedometer"),
+    require("./debug/measure"),
+    require("./debug/copy_pos"),
 ]
 
-for (const target of targets) {
-    const cmd = require(target)
-
+for (const cmd of cmds) {
     cmd.register(
         (args=null) => {
             let registrant = builder(cmd.name)
@@ -34,12 +37,13 @@ for (const target of targets) {
                         return fallback
                     }
                 }
-
+                bot = require("../bot.js")
                 bot.manage.set_is_running(true)
                 try {
                     cmd.run(arg)
                 } finally {
                     bot.manage.set_is_running(false)
+                    bot.manage.load_commands(true) // reload this so 'bot' is clean again
                 }
             })).register()
         }
@@ -54,6 +58,6 @@ for (const target of targets) {
 
 builder("help")
     .executes(JavaWrapper.methodToJava(ctx => {
-        bot.logger.info("These are commands of Azora Macros. Use /bot help <cmd> to check what that specific command does.")
+        Chat.log("These are commands of Azora Macros. Use /bot help <cmd> to check what that specific command does.")
     }))
     .register()

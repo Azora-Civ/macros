@@ -1,10 +1,9 @@
-﻿const do_layer = require("../map.js")
-
-module.exports = {
+﻿module.exports = {
     help: "Supply a string like: xooxx. where x->farm this layer, o->skip. Assumes you are standing on a lodestone with a supported farm.",
     name: __filename
-        .replace(/^.*[\\/]/, "")
-        .replace(/\.[^.]+$/, ""),
+        .replace(/^.*[\\/]commands[\\/]/, "")
+        .replace(/\.[^.]+$/, "")
+        .replace(/[\\/]/g, " "),
 
     /**
      * @param {(callback: (builder: CommandBuilder) => CommandBuilder) => any} with_args
@@ -14,6 +13,7 @@ module.exports = {
     },
 
     run(arg) {
+        const do_layer = require("../map")
         const mask = arg("xo_mask")
 
         bot.start((mask.match(/x/gi) ?? []).length)
@@ -24,8 +24,11 @@ module.exports = {
             }
 
             if (mask[i].toLowerCase() !== "x") {
+                Client.waitTick(10)
                 continue
             }
+
+            Client.waitTick(10)
 
             do_layer()
             bot.progress.increment()

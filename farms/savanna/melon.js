@@ -20,6 +20,8 @@
     bot.action.center()
     bot.action.elevator(-1)
 
+    bot.look.towards(bot.dir.WEST, 0)
+    bot.action.wait(500)
     bot.action.interact(bot.dir.WEST, 0, 100)
 
     const melon_slice = bot.item.of("melon_slice")

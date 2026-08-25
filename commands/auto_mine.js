@@ -1,8 +1,9 @@
 ﻿module.exports = {
     help: "Simple script that holds: sneak, left click, and forward",
     name: __filename
-        .replace(/^.*[\\/]/, "")
-        .replace(/\.[^.]+$/, ""), // defaults to filename w/o extension
+        .replace(/^.*[\\/]commands[\\/]/, "")
+        .replace(/\.[^.]+$/, "")
+        .replace(/[\\/]/g, " "), // defaults to filename w/o extension
 
     /**
      * @param {(callback: (builder: CommandBuilder) => CommandBuilder) => any} with_args
