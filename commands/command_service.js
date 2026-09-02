@@ -1,4 +1,4 @@
-﻿debug = true // global expected by the bot
+﻿debug = false // global expected by the bot
 do_discord_pings = true;
 
 const cmd_manager = Chat.getCommandManager()
