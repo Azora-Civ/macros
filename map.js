@@ -57,12 +57,7 @@ add_farms(
         "Savanna Acacia")
 )
 add_farms(
-    11, 9, Farm(vec3(8970, 79, 2559),
-        () => build_tree_farm(5, 17, 18, bot.dir.SOUTH, bot.dir.WEST, false),
-        "Savanna con. oak")
-)
-add_farms(
-    5, 9, Farm(vec3(8970, 79, 2554),
+    10, 9, Farm(vec3(8970, 79, 2554),
         () => tree_farm(bot.dir.SOUTH, bot.dir.WEST, 17, 18, 5, true, 1800, true, "oak"),
         "Savanna Oak"), vec3(8970, -57, 2554)
 )
