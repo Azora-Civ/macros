@@ -25,7 +25,6 @@
             target_level = item.getRepairCost() + 2
         }
 
-        const slot = bot.inv().getSelectedHotbarSlotIndex()
-        bot.action.complex.xp_up(target_level, slot)
+        bot.action.complex.xp_up(target_level, 0)
     },
 }

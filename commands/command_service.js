@@ -22,6 +22,7 @@ const cmds = [
     require("./debug/speedometer"),
     require("./debug/measure"),
     require("./debug/copy_pos"),
+    require("./mass_enchant"),
 ]
 
 for (const cmd of cmds) {
