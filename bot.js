@@ -19,10 +19,10 @@ const { Event } = require("./lib/util")
  * @property {typeof import("./lib/container")} container
  * @property {typeof import("./lib/manage")} manage
  * @property {typeof import("./lib/parse")} parse
+ * @property {typeof import("./lib/menu")} menu
  */
 
 let player = Player.getPlayer()
-let inv = Player.openInventory()
 
 const base = {
     start, finish,
@@ -45,9 +45,8 @@ const base = {
     },
 
     inv() {
-        inv = Player.openInventory() ?? inv
-        return inv
-    }
+        return bot.menu.current()
+    },
 }
 
 /** @type {Bot & typeof base} */
@@ -71,6 +70,7 @@ const libs = [
     "container",
     "manage",
     "parse",
+    "menu",
 ]
 
 for (const lib of libs) {

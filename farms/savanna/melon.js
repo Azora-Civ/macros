@@ -18,12 +18,17 @@
     bot.action.move(bot.dir.SOUTH, 1)
 
     bot.action.center()
-    bot.action.elevator(-1)
 
     bot.look.towards(bot.dir.WEST, 0)
+    bot.action.elevator(-1)
+
+    // DANGER POINT: stuff gets flaky from here AHHHH
+    bot.move.toggle(false)
+    bot.input.set([])
     bot.look.unset()
-    bot.action.wait(1000)
-    bot.action.interact(bot.dir.WEST, 0, 100)
+    bot.action.wait(500)
+
+    bot.menu.try_open("Crafting Table")
 
     const melon_slice = bot.item.of("melon_slice")
     const melon = bot.item.of("melon")
