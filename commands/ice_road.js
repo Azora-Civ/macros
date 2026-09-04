@@ -1,4 +1,6 @@
-﻿module.exports = {
+﻿const interval = 50
+
+module.exports = {
     help: "Automatically uses an iceroad. Use A & D to change direction.",
     name: __filename
         .replace(/^.*[\\/]commands[\\/]/, "")
@@ -14,8 +16,6 @@
     },
 
     run(arg) {
-        // const my_arg = arg("my_arg", null)
-
         set_dir_octant(0)
 
         bot.input.unpress_all()
@@ -23,11 +23,11 @@
         bot.input.add(bot.input.FORWARD)
         bot.input.add(bot.input.SPRINT)
 
-        bot.on_repeat.set("jumpy", iter => {
-            if (iter % 6 === 0) {
+        bot.on_repeat.set("ice_road", iter => {
+            if (iter % (interval*2) === 0) {
                 bot.input.add(bot.input.JUMP)
             }
-            if ((iter+3) % 6 === 0) {
+            if ((iter+interval) % (interval*2) === 0) {
                 bot.input.remove(bot.input.JUMP)
             }
         })
@@ -35,10 +35,10 @@
         let iter = 0
         while (!bot.is_paused()) {
             if (bot.input.key_down(bot.input.RIGHT)) {
-                set_dir_octant(45)
+                set_dir_octant(1)
             }
             if (bot.input.key_down(bot.input.LEFT)) {
-                set_dir_octant(-45)
+                set_dir_octant(-1)
             }
 
             bot.on_repeat.emit(iter++)
@@ -49,8 +49,23 @@
 }
 
 function set_dir_octant(offset) {
+    const OCTANT = 45
+
     let dir = bot.dir.get_dir(false)
-    dir += offset
+    const snapped = bot.dir.snap_octant(dir)
+    const close_enough = Math.abs(dir - snapped) < .3
+
+    if (close_enough) {
+        dir = snapped
+    } else if (offset > 0) {
+        dir = Math.ceil(dir / OCTANT) * OCTANT
+        offset--
+    } else if (offset < 0) {
+        dir = Math.floor(dir / OCTANT) * OCTANT
+        offset++
+    }
+
+    dir += OCTANT * offset
     dir = bot.dir.snap_octant(dir)
 
     bot.look.towards(dir, 0)
