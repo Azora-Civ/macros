@@ -23,6 +23,7 @@ const { Event } = require("./lib/util")
  */
 
 let player = Player.getPlayer()
+let inventory = Player.openInventory()
 
 const base = {
     start, finish,
@@ -45,7 +46,8 @@ const base = {
     },
 
     inv() {
-        return bot.menu.current()
+        inventory = Player.openInventory() ?? inventory
+        return inventory
     },
 }
 
