@@ -20,9 +20,11 @@
     bot.action.center()
 
     bot.look.towards(bot.dir.WEST, 0)
+    bot.action.wait(200)
     bot.action.elevator(-1)
 
     // DANGER POINT: stuff gets flaky from here AHHHH
+    bot.action.wait(500)
     bot.move.toggle(false)
     bot.input.set([])
     bot.look.unset()
