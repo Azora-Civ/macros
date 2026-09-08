@@ -41,7 +41,12 @@ module.exports = {
                 set_dir_octant(-1)
             }
 
-            bot.on_repeat.emit(iter++)
+            try {
+                bot.on_repeat.emit(iter++)
+            } catch (e) {
+                break
+            }
+
             Time.sleep(1)
         }
         bot.input.unpress_all()

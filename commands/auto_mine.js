@@ -15,12 +15,17 @@
     run(arg) {
         bot.input.unpress_all()
         bot.move.toggle(false)
-        bot.input.toggle_sneak(true)
-        bot.input.add(bot.input.FORWARD)
-        bot.input.add(bot.input.ATTACK)
+        bot.input.do(bot.input.SNEAK)
+        bot.input.do(bot.input.FORWARD)
+        bot.input.do(bot.input.ATTACK)
 
         while (!bot.is_paused()) {
-            bot.on_repeat.emit(0)
+            try {
+                bot.on_repeat.emit(0)
+            } catch (e) {
+                break
+            }
+
             Time.sleep(1)
         }
         bot.input.unpress_all()
