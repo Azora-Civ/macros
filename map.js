@@ -62,12 +62,6 @@ add_farms(
         "Savanna Oak"), vec3(8970, -57, 2554)
 )
 add_farm(Farm(vec3(8995, 70, 2530), require("./farms/savanna/melon"), "Savanna Melon"))
-add_farms(
-    6, vec3(0, 0, -5), Farm(vec3(8991, 86, 2542), () => build_melon_bed(bot.dir.WEST, bot.dir.NORTH, 133, bot.item.of("melon_seeds"), bot.item.of("diamond_hoe")), "Savanna Melon con H2")
-)
-add_farms(
-    6, vec3(0, 0, -5), Farm(vec3(8991, 90, 2542), () => build_melon_bed(bot.dir.WEST, bot.dir.NORTH, 133, bot.item.of("melon_seeds"), bot.item.of("diamond_hoe")), "Savanna Melon con H3")
-)
 
 // ===== Azuna =====
 add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), null, { mine_time: 2000 }))
