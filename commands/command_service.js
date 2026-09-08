@@ -1,5 +1,6 @@
 ﻿debug = false // global expected by the bot
 do_discord_pings = true;
+GlobalVars.putBoolean("commands_quit", false)
 
 const cmd_manager = Chat.getCommandManager()
 cmd_manager.unregisterCommand("bot")
@@ -62,3 +63,7 @@ builder("help")
         Chat.log("These are commands of Azora Macros. Use /bot help <cmd> to check what that specific command does.")
     }))
     .register()
+
+while (!GlobalVars.getBoolean("commands_quit")) {
+    Time.sleep(100)
+}
