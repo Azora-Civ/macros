@@ -70,6 +70,7 @@ add_farms(5, 7, Farm(vec3(-579, 3, -25737), require("./farms/azuna/oak.js"), nul
 
 // ===== Loose stuff =====
 add_farm(Farm(vec3(9426, 115, 1735), require("./farms/bleeze_wait.js")))
+add_farm(Farm(vec3(9424, 54, 1737), require("./farms/bleeze_wait.js")))
 
 
 

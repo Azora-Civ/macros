@@ -10,6 +10,7 @@ module.exports = function () {
 
     bot.move.toDir(bot.dir.NORTH, 0)
     bot.look.towards(bot.dir.NORTH, 90)
+    bot.input.do(bot.input.SNEAK)
 
     bot.on_repeat.set("bleeze", check_bleeze)
     bot.control.loop(() => !seen_bleeze && !bot.is_paused())
