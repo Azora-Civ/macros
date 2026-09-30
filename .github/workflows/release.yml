@@ -21,6 +21,14 @@ jobs:
         with:
           node-version: 22
 
+      - name: Create release ZIP
+        run: |
+          zip -r bot.zip . \
+            -x ".git/*" \
+            -x ".github/*" \
+            -x "types/*" \
+            -x "jsconfig.json"
+
       - run: >
           npx --yes semantic-release
           --branches main
@@ -31,3 +39,8 @@ jobs:
           @semantic-release/github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload release ZIP
+        run: gh release upload "$(git describe --tags --abbrev=0)" bot.zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
