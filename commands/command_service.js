@@ -1,19 +1,12 @@
-﻿debug = false // global expected by the bot
-do_discord_pings = true;
+﻿
+JsMacros.assertEvent(event, "Service")
+
+debug = false // global expected by the bot
+do_discord_pings = true
 GlobalVars.putBoolean("commands_quit", false)
 
 const cmd_manager = Chat.getCommandManager()
 cmd_manager.unregisterCommand("bot")
-
-function builder(name) {
-    const parts = name.split(" ")
-    let builder = cmd_manager.createCommandBuilder("bot")
-    for (const part of parts) {
-        builder = builder.literalArg(part)
-    }
-    return builder
-}
-
 
 const cmds = [
     require("./auto_mine.js"),
@@ -26,11 +19,21 @@ const cmds = [
     require("./mass_enchant"),
 ]
 
+const root = cmd_manager.createCommandBuilder("bot")
+
+function builder(name) {
+    for (const part of name.split(" ")) {
+        root.literalArg(part)
+    }
+    return root
+}
+
 for (const cmd of cmds) {
     cmd.register(
-        (args=null) => {
+        (args = null) => {
             let registrant = builder(cmd.name)
             if (args) registrant = args(registrant)
+
             registrant.executes(JavaWrapper.methodToJavaAsync(ctx => {
                 const arg = (name, fallback = null) => {
                     try {
@@ -39,7 +42,9 @@ for (const cmd of cmds) {
                         return fallback
                     }
                 }
-                bot = require("../bot.js")
+
+                globalThis.bot = require("../bot.js")
+
                 bot.manage.set_is_running(true)
                 try {
                     cmd.run(arg)
@@ -47,7 +52,7 @@ for (const cmd of cmds) {
                     bot.manage.set_is_running(false)
                     bot.manage.load_commands(true) // reload this so 'bot' is clean again
                 }
-            })).register()
+            })).or(1)
         }
     )
 
@@ -55,15 +60,18 @@ for (const cmd of cmds) {
         .executes(JavaWrapper.methodToJava(ctx => {
             Chat.log(cmd.help)
         }))
-        .register()
+        .or(1)
 }
 
 builder("help")
     .executes(JavaWrapper.methodToJava(ctx => {
         Chat.log("These are commands of Azora Macros. Use /bot help <cmd> to check what that specific command does.")
     }))
-    .register()
+    .or(1)
 
-while (!GlobalVars.getBoolean("commands_quit")) {
-    Time.sleep(100)
-}
+// Register the complete command tree once
+root.register()
+
+event.stopListener = JavaWrapper.methodToJava(() => {
+    cmd_manager.unregisterCommand("bot")
+})
