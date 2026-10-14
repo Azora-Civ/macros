@@ -27,3 +27,5 @@ declare const ARROW_UP: "key.keyboard.up";
 declare const ARROW_RIGHT: "key.keyboard.right";
 declare const ARROW_LEFT: "key.keyboard.left";
 declare const ARROW_DOWN: "key.keyboard.down";
+
+declare function vec(x, y, z);

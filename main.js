@@ -1,4 +1,4 @@
-bot = require("./bot.js")
+require("./bot.js")
 
 const HOLD_TIME_MILLIS = 1000
 
@@ -33,7 +33,7 @@ if (bot.manage.is_already_running()) {
 bot.manage.set_is_running(true)
 try {
     bot.manage.load_commands()
-    require("./map.js")()
+    require("./scripts/mappings")()
 }
 finally {
     bot.manage.set_is_running(false)

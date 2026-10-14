@@ -13,7 +13,7 @@
     },
 
     run(arg) {
-        const do_layer = require("../map")
+        const do_layer = require("../scripts/mappings")
         const mask = arg("xo_mask")
 
         bot.start((mask.match(/x/gi) ?? []).length)

@@ -1,5 +1,8 @@
 const { Event } = require("./lib/util")
 
+globalThis.debug ??= false;
+globalThis.do_discord_pings ??= true;
+
 /**
  * @typedef {Object} Bot
  * @property {typeof import("./lib/look")} look

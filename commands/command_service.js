@@ -1,5 +1,5 @@
-﻿
-JsMacros.assertEvent(event, "Service")
+﻿JsMacros.assertEvent(event, "Service")
+JsMacros.waitForEvent("Tick");
 
 debug = false // global expected by the bot
 do_discord_pings = true

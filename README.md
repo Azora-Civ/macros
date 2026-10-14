@@ -1,0 +1,2 @@
+﻿# Azora's JSMacros Bot
+
