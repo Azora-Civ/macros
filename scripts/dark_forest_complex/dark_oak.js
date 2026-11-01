@@ -1,7 +1,7 @@
 ﻿const { positional, layered } = require("../script_def")
 
 module.exports = {
-    ...layered(vec(8934, 103, 1408), 3, 11, "DF Dark Oak"),
+    ...layered(vec(8934, 103, 1408), 11, 3, "DF Dark Oak"),
     run() {
         let offset = 8
         let rows = 10
